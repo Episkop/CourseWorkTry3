@@ -22,7 +22,11 @@ public class Account {
     @OneToMany(mappedBy = "accountSP", cascade = CascadeType.ALL)
     private List<Spending> spendings = new ArrayList<>();
 
+    @OneToOne(mappedBy = "accountPT",cascade = CascadeType.ALL)
+    private ProfitTotal totalProf = new ProfitTotal();
 
+    @OneToOne(mappedBy = "accountST",cascade = CascadeType.ALL)
+    private SpendingTotal totalSpend = new SpendingTotal();
     public Account() {}
 
     private Account(String email, String name, String pictureUrl) {
@@ -45,6 +49,15 @@ public class Account {
         spendings.add(spending);
     }
 
+    public void addProfitTotal(ProfitTotal profitTotal){
+        profitTotal.setAccount(this);
+        totalProf = profitTotal;
+    }
+
+    public void addSpendingTotal(SpendingTotal spendingTotal){
+        spendingTotal.setAccount(this);
+        totalSpend = spendingTotal;
+    }
     public AccountDTO toDTO() {
         return AccountDTO.of(email, name, pictureUrl);
     }
@@ -85,14 +98,6 @@ public class Account {
         this.pictureUrl = pictureUrl;
     }
 
-//    public List<Profit> getTasks() {
-//        return profits;
-//    }
-//
-//    public void setTasks(List<Profit> profits) {
-//        this.profits = profits;
-//    }
-
     public List<Profit> getProfits() {
         return profits;
     }
@@ -107,5 +112,13 @@ public class Account {
 
     public void setSpendings(List<Spending> spendings) {
         this.spendings = spendings;
+    }
+
+    public ProfitTotal getTotalProf() {
+        return totalProf;
+    }
+
+    public void setTotalProf(ProfitTotal totalProf) {
+        this.totalProf = totalProf;
     }
 }

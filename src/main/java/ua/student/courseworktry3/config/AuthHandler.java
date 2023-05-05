@@ -5,9 +5,7 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import ua.student.courseworktry3.dto.AccountDTO;
-import ua.student.courseworktry3.dto.ProfitDTO;
-import ua.student.courseworktry3.dto.SpendingDTO;
+import ua.student.courseworktry3.dto.*;
 import ua.student.courseworktry3.services.Interface.GeneralService;
 
 
@@ -61,9 +59,13 @@ public class AuthHandler implements AuthenticationSuccessHandler {
                 SpendingDTO.of("Other", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
                 SpendingDTO.of("Credit", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
         );
+        ProfitTotalDTO totalProfitDTO = ProfitTotalDTO.of("total",0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
-        generalService.addAccount(accountDTO, profit, spending);
+        SpendingTotalDTO totalSpendingDTO = SpendingTotalDTO.of("total",0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+
+        generalService.addAccount(accountDTO, profit, spending, totalProfitDTO, totalSpendingDTO);
 
         httpServletResponse.sendRedirect("/");
     }
+
 }

@@ -1,17 +1,17 @@
 package ua.student.courseworktry3.model;
 
-import ua.student.courseworktry3.dto.ProfitDTO;
+import ua.student.courseworktry3.dto.ProfitTotalDTO;
+import ua.student.courseworktry3.dto.SpendingTotalDTO;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "profit")
-public class Profit {
+@Table (name = "TotalSpending")
+public class SpendingTotal {
     @Id
     @GeneratedValue
     @Column(name = "id", nullable = false)
-    private  Long id;
-
+    private Long id;
     @Column(name ="article",nullable = false)
     private String article;
     private Double january;
@@ -28,15 +28,21 @@ public class Profit {
     private Double december;
     private Double sum;
 
-    @ManyToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "account_id")
-    private Account account;
+    private Account accountST;
 
-    public Profit() {}
+    public Account getAccount() {
+        return accountST;
+    }
 
-    public Profit(String article, Double january, Double february, Double march, Double april, Double may,
-                  Double june, Double july, Double august, Double september, Double october, Double november,
-                  Double december, Double sum) {
+    public void setAccount(Account accountPT) {
+        this.accountST = accountST;
+    }
+
+    public SpendingTotal(String article, Double january, Double february, Double march, Double april, Double may,
+                         Double june, Double july, Double august, Double september, Double october, Double november,
+                         Double december, Double sum) {
         this.article = article;
         this.january = january;
         this.february = february;
@@ -53,22 +59,25 @@ public class Profit {
         this.sum = sum;
     }
 
-    public static Profit of(String article, Double january, Double february, Double march, Double april, Double may,
-                            Double june, Double july, Double august, Double september, Double october, Double november,
-                            Double december, Double sum) {
-        return new Profit(article, january, february, march, april, may, june, july, august,
+    public SpendingTotal() {
+    }
+
+    public static SpendingTotal of(String article, Double january, Double february, Double march, Double april, Double may,
+                                   Double june, Double july, Double august, Double september, Double october, Double november,
+                                   Double december, Double sum){
+        return new SpendingTotal(article, january, february, march, april, may, june, july, august,
                 september, october, november, december,sum);
     }
 
-    public ProfitDTO toDTO() {
-        return ProfitDTO.of(id,article, january, february, march, april, may, june, july, august,
+    public SpendingTotalDTO toDTO() {
+        return SpendingTotalDTO.of(id,article, january, february, march, april, may, june, july, august,
                 september, october, november, december,sum);
     }
 
-    public static Profit fromDTO(ProfitDTO profitDTO)  {
-        return Profit.of(profitDTO.getArticle(),profitDTO.getJanuary(),profitDTO.getFebruary(),profitDTO.getMarch(),profitDTO.getApril(),
-                profitDTO.getMay(), profitDTO.getJune(),profitDTO.getJuly(), profitDTO.getAugust(), profitDTO.getSeptember(), profitDTO.getOctober(),
-                profitDTO.getNovember(), profitDTO.getDecember(), profitDTO.getSum());
+    public static SpendingTotal fromDTO(SpendingTotalDTO spendingTotalDTO){
+        return SpendingTotal.of(spendingTotalDTO.getArticle(),spendingTotalDTO.getJanuary(),spendingTotalDTO.getFebruary(),spendingTotalDTO.getMarch(),spendingTotalDTO.getApril(),
+                spendingTotalDTO.getMay(), spendingTotalDTO.getJune(),spendingTotalDTO.getJuly(), spendingTotalDTO.getAugust(), spendingTotalDTO.getSeptember(), spendingTotalDTO.getOctober(),
+                spendingTotalDTO.getNovember(), spendingTotalDTO.getDecember(), spendingTotalDTO.getSum());
     }
 
     public Long getId() {
@@ -190,13 +199,4 @@ public class Profit {
     public void setSum(Double sum) {
         this.sum = sum;
     }
-
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
-    }
-
 }

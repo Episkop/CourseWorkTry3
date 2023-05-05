@@ -1,20 +1,14 @@
 package ua.student.courseworktry3.services;
 
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.student.courseworktry3.dto.AccountDTO;
-import ua.student.courseworktry3.dto.ProfitDTO;
-import ua.student.courseworktry3.dto.SpendingDTO;
-import ua.student.courseworktry3.model.Account;
-import ua.student.courseworktry3.model.Profit;
-import ua.student.courseworktry3.model.Spending;
+import ua.student.courseworktry3.dto.*;
+import ua.student.courseworktry3.model.*;
 import ua.student.courseworktry3.repos.AccountRepository;
 import ua.student.courseworktry3.repos.ProfitRepository;
 import ua.student.courseworktry3.services.Interface.GeneralService;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -32,7 +26,8 @@ public class GeneralServiceImpl implements GeneralService {
 
     @Transactional
     @Override
-    public void addAccount(AccountDTO accountDTO, List<ProfitDTO> profitDTOS, List<SpendingDTO> spendingDTOS) {
+    public void addAccount(AccountDTO accountDTO, List<ProfitDTO> profitDTOS, List<SpendingDTO> spendingDTOS,
+                           ProfitTotalDTO totalProfitDTO, SpendingTotalDTO totalSpendingDTO) {
         if (accountRepository.existsByEmail(accountDTO.getEmail()))
             return; // do nothing
 
@@ -46,6 +41,13 @@ public class GeneralServiceImpl implements GeneralService {
             Spending spending = Spending.fromDTO(x);
             account.addSpending(spending);
         });
+
+        ProfitTotal profitTotal = ProfitTotal.fromDTO(totalProfitDTO);
+        account.addProfitTotal(profitTotal);
+
+        SpendingTotal spendingTotal = SpendingTotal.fromDTO(totalSpendingDTO);
+        account.addSpendingTotal(spendingTotal);
+
         accountRepository.save(account);
     }
 

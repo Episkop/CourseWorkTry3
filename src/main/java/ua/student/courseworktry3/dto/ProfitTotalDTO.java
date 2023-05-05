@@ -1,18 +1,7 @@
-package ua.student.courseworktry3.model;
+package ua.student.courseworktry3.dto;
 
-import ua.student.courseworktry3.dto.ProfitDTO;
-
-import javax.persistence.*;
-
-@Entity
-@Table(name = "profit")
-public class Profit {
-    @Id
-    @GeneratedValue
-    @Column(name = "id", nullable = false)
-    private  Long id;
-
-    @Column(name ="article",nullable = false)
+public class ProfitTotalDTO {
+    private Long id;
     private String article;
     private Double january;
     private Double february;
@@ -28,15 +17,9 @@ public class Profit {
     private Double december;
     private Double sum;
 
-    @ManyToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
-
-    public Profit() {}
-
-    public Profit(String article, Double january, Double february, Double march, Double april, Double may,
-                  Double june, Double july, Double august, Double september, Double october, Double november,
-                  Double december, Double sum) {
+    public ProfitTotalDTO(String article, Double january, Double february, Double march, Double april, Double may,
+                          Double june, Double july, Double august, Double september, Double october, Double november,
+                          Double december, Double sum) {
         this.article = article;
         this.january = january;
         this.february = february;
@@ -53,22 +36,36 @@ public class Profit {
         this.sum = sum;
     }
 
-    public static Profit of(String article, Double january, Double february, Double march, Double april, Double may,
-                            Double june, Double july, Double august, Double september, Double october, Double november,
-                            Double december, Double sum) {
-        return new Profit(article, january, february, march, april, may, june, july, august,
+    public ProfitTotalDTO(Long id,String article, Double january, Double february, Double march, Double april, Double may,
+                          Double june, Double july, Double august, Double september, Double october, Double november,
+                          Double december, Double sum) {
+        this.id = id;
+        this.article = article;
+        this.january = january;
+        this.february = february;
+        this.march = march;
+        this.april = april;
+        this.may = may;
+        this.june = june;
+        this.july = july;
+        this.august = august;
+        this.september = september;
+        this.october = october;
+        this.november = november;
+        this.december = december;
+        this.sum = sum;
+    }
+    public static ProfitTotalDTO of(String article,Double january, Double february, Double march, Double april, Double may,
+                                 Double june, Double july, Double august, Double september, Double october, Double november,
+                                 Double december, Double sum){
+        return new ProfitTotalDTO(article,january, february, march, april, may, june, july, august,
                 september, october, november, december,sum);
     }
-
-    public ProfitDTO toDTO() {
-        return ProfitDTO.of(id,article, january, february, march, april, may, june, july, august,
+    public static ProfitTotalDTO of(Long id,String article,Double january, Double february, Double march, Double april, Double may,
+                                    Double june, Double july, Double august, Double september, Double october, Double november,
+                                    Double december, Double sum){
+        return new ProfitTotalDTO(id,article,january, february, march, april, may, june, july, august,
                 september, october, november, december,sum);
-    }
-
-    public static Profit fromDTO(ProfitDTO profitDTO)  {
-        return Profit.of(profitDTO.getArticle(),profitDTO.getJanuary(),profitDTO.getFebruary(),profitDTO.getMarch(),profitDTO.getApril(),
-                profitDTO.getMay(), profitDTO.getJune(),profitDTO.getJuly(), profitDTO.getAugust(), profitDTO.getSeptember(), profitDTO.getOctober(),
-                profitDTO.getNovember(), profitDTO.getDecember(), profitDTO.getSum());
     }
 
     public Long getId() {
@@ -190,13 +187,4 @@ public class Profit {
     public void setSum(Double sum) {
         this.sum = sum;
     }
-
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
-    }
-
 }

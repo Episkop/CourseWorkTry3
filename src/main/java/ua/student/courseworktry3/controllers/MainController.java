@@ -55,9 +55,16 @@ public class MainController {
 //    }
 
     @PostMapping("add")
-    public ResponseEntity<ResultDTO> addTask(OAuth2AuthenticationToken auth, @RequestBody ProfitDTO profit) throws AlreadyExistException {
+    public ResponseEntity<ResultDTO> addTask(OAuth2AuthenticationToken auth, @RequestParam(required = true) String article, @RequestParam(required = false) Double january,
+                                 @RequestParam(required = false) Double february, @RequestParam(required = false) Double march,
+                                 @RequestParam(required = false) Double april, @RequestParam(required = false) Double may,
+                                 @RequestParam(required = false) Double june, @RequestParam(required = false) Double july,
+                                 @RequestParam(required = false) Double august, @RequestParam(required = false) Double september,
+                                 @RequestParam(required = false) Double october, @RequestParam(required = false) Double november,
+                                 @RequestParam(required = false) Double december,@RequestParam(required = false) Double sum) throws AlreadyExistException {
         String email = getEmail(auth);
-        profitService.addProfit(profit, email);
+        profitService.addProfit(article, january, february, march, april, may, june, july, august,
+                september, october, november, december,sum, email);
 
         return new ResponseEntity<>(new SuccessResult(), HttpStatus.OK);
     }

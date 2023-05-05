@@ -135,7 +135,7 @@ public class Spending {
         this.accountSP = accountSP;
     }
 
-    public void getAccountSP(Account account) {
+    public void getAccountSP(Account accountSP) {
         this.accountSP = accountSP;
     }
 
