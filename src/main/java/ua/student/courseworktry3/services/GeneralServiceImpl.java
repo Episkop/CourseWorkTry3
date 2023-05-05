@@ -98,7 +98,7 @@ public class GeneralServiceImpl implements GeneralService {
     @Transactional(readOnly = true)
     @Override
     public Long count(String email) {
-        return profitRepository.countByAccountEmail(email);
+        return profitRepository.countByAccountProfitEmail(email);
     }
 
     @Transactional

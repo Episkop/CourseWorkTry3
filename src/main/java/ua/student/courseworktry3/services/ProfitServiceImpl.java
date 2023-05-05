@@ -37,7 +37,7 @@ public class ProfitServiceImpl implements ProfitService {
     @Override
     public List<ProfitDTO> getAllProfit(String email) throws DBIsEmptyException {
         List<ProfitDTO> modelList = new ArrayList<>();
-        List<Profit> list = profitRepository.findByAccountEmail(email);
+        List<Profit> list = profitRepository.findByAccountProfitEmail(email);
         if (list.isEmpty())
             throw new DBIsEmptyException("Data Base is empty!");
         list.forEach(x -> modelList.add(x.toDTO()));
@@ -47,7 +47,7 @@ public class ProfitServiceImpl implements ProfitService {
     @Override
     public List<ProfitTotalDTO> getAllTotalProfit(String email) throws DBIsEmptyException {
         List<ProfitTotalDTO> modelList = new ArrayList<>();
-        List<ProfitTotal> list = profitTotalRepository.findByAccountPTEmail(email);
+        List<ProfitTotal> list = profitTotalRepository.findByAccountProfitTotalEmail(email);
         if (list.isEmpty())
             throw new DBIsEmptyException("Data Base Total is empty!");
         list.forEach(x -> modelList.add(x.toDTO()));
@@ -68,12 +68,12 @@ public class ProfitServiceImpl implements ProfitService {
     @Override
     public boolean addProfit(String article, Double january, Double february, Double march, Double april, Double may,
                              Double june, Double july, Double august, Double september, Double october, Double november,
-                             Double december, Double sum, String email) throws AlreadyExistException {
+                             Double december, Double year, String email) throws AlreadyExistException {
         Account account = accountRepository.findByEmail(email);
         if (profitRepository.existsByArticle(article))
             return false;
         ProfitDTO dto = new ProfitDTO(article, january, february, march, april, may, june, july, august,
-                september, october, november, december, sum);
+                september, october, november, december, year);
         if (january == null)
             dto.setJanuary(0.0);
         if (february == null)
@@ -98,8 +98,8 @@ public class ProfitServiceImpl implements ProfitService {
             dto.setNovember(0.0);
         if (december == null)
             dto.setDecember(0.0);
-        if (sum == null)
-            dto.setSum(sum);
+        if (year == null)
+            dto.setSum(year);
         account.addProfit(Profit.fromDTO(dto));
         return true;
     }
@@ -128,7 +128,7 @@ public class ProfitServiceImpl implements ProfitService {
     @Override
     public boolean updateProfit(String article, Double january, Double february, Double march, Double april, Double may,
                                 Double june, Double july, Double august, Double september, Double october, Double november,
-                                Double december, Double sum, String email) throws NotFoundException {
+                                Double december, Double year, String email) throws NotFoundException {
         Account account = accountRepository.findByEmail(email);
         if (profitRepository.existsByArticle(article))
             return false;
@@ -137,7 +137,7 @@ public class ProfitServiceImpl implements ProfitService {
 //            throw new NotFoundException("Such " + article + " don`t found");
 //        }
         ProfitDTO profit = new ProfitDTO(article, january, february, march, april, may, june, july, august,
-                september, october, november, december, sum);
+                september, october, november, december, year);
         if (january != null)
             profit.setJanuary(january);
         if (february != null)
@@ -162,8 +162,8 @@ public class ProfitServiceImpl implements ProfitService {
             profit.setNovember(november);
         if (december != null)
             profit.setDecember(december);
-        if (sum != null)
-            profit.setSum(sum);
+        if (year != null)
+            profit.setSum(year);
         //TODO
         profitRepository.sumProfitLine(january, february, march, april, may, june, july, august,
                 september, october, november, december, article);

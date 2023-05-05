@@ -56,7 +56,7 @@ public class ProfitController {
 
 
     @PostMapping("/save")
-    public ResponseEntity saveProfit(@RequestParam(required = true) String article, @RequestParam(required = false) Double january,
+    public ResponseEntity addProfit(@RequestParam(required = true) String article, @RequestParam(required = false) Double january,
                                  @RequestParam(required = false) Double february, @RequestParam(required = false) Double march,
                                  @RequestParam(required = false) Double april, @RequestParam(required = false) Double may,
                                  @RequestParam(required = false) Double june, @RequestParam(required = false) Double july,

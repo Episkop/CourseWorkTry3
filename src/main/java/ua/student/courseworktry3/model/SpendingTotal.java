@@ -1,6 +1,5 @@
 package ua.student.courseworktry3.model;
 
-import ua.student.courseworktry3.dto.ProfitTotalDTO;
 import ua.student.courseworktry3.dto.SpendingTotalDTO;
 
 import javax.persistence.*;
@@ -30,14 +29,14 @@ public class SpendingTotal {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "account_id")
-    private Account accountST;
+    private Account accountSpendingTotal;
 
     public Account getAccount() {
-        return accountST;
+        return accountSpendingTotal;
     }
 
-    public void setAccount(Account accountPT) {
-        this.accountST = accountST;
+    public void setAccount(Account accountSpendingTotal) {
+        this.accountSpendingTotal = accountSpendingTotal;
     }
 
     public SpendingTotal(String article, Double january, Double february, Double march, Double april, Double may,

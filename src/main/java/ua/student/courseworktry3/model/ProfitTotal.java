@@ -29,14 +29,14 @@ public class ProfitTotal {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "account_id")
-    private Account accountPT;
+    private Account accountProfitTotal;
 
     public Account getAccount() {
-        return accountPT;
+        return accountProfitTotal;
     }
 
-    public void setAccount(Account accountPT) {
-        this.accountPT = accountPT;
+    public void setAccount(Account accountProfitTotal) {
+        this.accountProfitTotal = accountProfitTotal;
     }
 
     public ProfitTotal(String article, Double january, Double february, Double march, Double april, Double may,

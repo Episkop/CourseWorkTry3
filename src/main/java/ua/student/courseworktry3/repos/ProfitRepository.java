@@ -10,8 +10,8 @@ import java.util.List;
 
 
 public interface ProfitRepository extends JpaRepository<Profit, Long> {
-    List<Profit> findByAccountEmail(String email);
-    Long countByAccountEmail(String email);
+    List<Profit> findByAccountProfitEmail(String email);
+    Long countByAccountProfitEmail(String email);
     Profit findByArticle (String article);
     boolean existsByArticle (String article);
 

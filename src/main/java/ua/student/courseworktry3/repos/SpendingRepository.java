@@ -10,7 +10,7 @@ import java.util.List;
 public interface SpendingRepository extends JpaRepository<Spending, Long> {
     boolean existsByArticle (String article);
     Spending findByArticle (String article);
-    List<Spending> findByAccountSPEmail(String email);
+    List<Spending> findByAccountSpendingEmail(String email);
 
     @Modifying
     @Query("UPDATE Spending e SET e.sum = e.january + e.february + e.march + e.april + e.may + " +

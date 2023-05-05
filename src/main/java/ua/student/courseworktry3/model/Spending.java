@@ -30,7 +30,7 @@ public class Spending {
 
     @ManyToOne
     @JoinColumn(name = "account_id")
-    private Account accountSP;
+    private Account accountSpending;
 
 
     public Spending(String article, Double january, Double february, Double march, Double april, Double may,
@@ -131,12 +131,12 @@ public class Spending {
         this.sum = sum;
     }
 
-    public void setAccountSP(Account accountSP) {
-        this.accountSP = accountSP;
+    public void setAccountSpending(Account accountSpending) {
+        this.accountSpending = accountSpending;
     }
 
-    public void getAccountSP(Account accountSP) {
-        this.accountSP = accountSP;
+    public void getAccountSpending(Account accountSpending) {
+        this.accountSpending = accountSpending;
     }
 
 

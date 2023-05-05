@@ -28,9 +28,9 @@ public class Profit {
     private Double december;
     private Double sum;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "account_id")
-    private Account account;
+    private Account accountProfit;
 
     public Profit() {}
 
@@ -62,7 +62,7 @@ public class Profit {
 
     public ProfitDTO toDTO() {
         return ProfitDTO.of(id,article, january, february, march, april, may, june, july, august,
-                september, october, november, december,sum);
+                september, october, november, december, sum);
     }
 
     public static Profit fromDTO(ProfitDTO profitDTO)  {
@@ -191,12 +191,12 @@ public class Profit {
         this.sum = sum;
     }
 
-    public Account getAccount() {
-        return account;
+    public Account getAccountProfit() {
+        return accountProfit;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
+    public void setAccountProfit(Account accountProfit) {
+        this.accountProfit = accountProfit;
     }
 
 }

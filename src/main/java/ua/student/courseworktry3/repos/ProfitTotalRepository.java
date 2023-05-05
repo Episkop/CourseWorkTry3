@@ -12,5 +12,5 @@ public interface ProfitTotalRepository extends JpaRepository<ProfitTotal, Long> 
 
     ProfitTotal findByArticle (String article);
 
-    List<ProfitTotal> findByAccountPTEmail (String email);
+    List<ProfitTotal> findByAccountProfitTotalEmail (String email);
 }

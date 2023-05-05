@@ -1,11 +1,5 @@
 package ua.student.courseworktry3.dto;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.Date;
-
 public class ProfitDTO {
     private Long id;
 

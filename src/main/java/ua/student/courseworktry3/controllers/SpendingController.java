@@ -52,8 +52,8 @@ public class SpendingController {
             return ResponseEntity.badRequest().body("Not found!");
         }
     }
-    @PostMapping("/save")
-    public ResponseEntity saveProfit(@RequestParam(required = true) String article, @RequestParam(required = false) Double january,
+    @PostMapping("/addSpending")
+    public ResponseEntity addSpending(@RequestParam(required = true) String article, @RequestParam(required = false) Double january,
                                      @RequestParam(required = false) Double february, @RequestParam(required = false) Double march,
                                      @RequestParam(required = false) Double april, @RequestParam(required = false) Double may,
                                      @RequestParam(required = false) Double june, @RequestParam(required = false) Double july,

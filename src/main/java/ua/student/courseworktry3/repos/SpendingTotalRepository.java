@@ -13,5 +13,5 @@ public interface SpendingTotalRepository extends JpaRepository<SpendingTotal, Lo
 
     SpendingTotal findByArticle (String article);
 
-    List<SpendingTotal> findByAccountSTEmail (String email);
+    List<SpendingTotal> findByAccountSpendingTotalEmail (String email);
 }

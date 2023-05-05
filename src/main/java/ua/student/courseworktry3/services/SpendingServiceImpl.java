@@ -35,7 +35,7 @@ public class SpendingServiceImpl implements SpendingService {
     @Override
     public List<SpendingDTO> getAllSpending(String email) throws DBIsEmptyException {
         List<SpendingDTO> modelList = new ArrayList<>();
-        List<Spending> list = spendingRepository.findByAccountSPEmail(email);
+        List<Spending> list = spendingRepository.findByAccountSpendingEmail(email);
         if (list.isEmpty())
             throw new DBIsEmptyException("Data Base is empty!");
         list.forEach(x -> modelList.add(x.toDTO()));
@@ -96,7 +96,7 @@ public class SpendingServiceImpl implements SpendingService {
     @Override
     public List<SpendingTotalDTO> getTotal(String email) throws DBIsEmptyException {
         List<SpendingTotalDTO> modelList = new ArrayList<>();
-        List<SpendingTotal> list = spendingTotalRepository.findByAccountSTEmail(email);
+        List<SpendingTotal> list = spendingTotalRepository.findByAccountSpendingTotalEmail(email);
         if (list.isEmpty())
             throw new DBIsEmptyException("Data Base Total is empty!");
         list.forEach(x -> modelList.add(x.toDTO()));
