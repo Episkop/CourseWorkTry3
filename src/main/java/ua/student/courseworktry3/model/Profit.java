@@ -26,7 +26,7 @@ public class Profit {
     private Double october;
     private Double november;
     private Double december;
-    private Double sum;
+    private Double year;
 
     @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "account_id")
@@ -36,7 +36,7 @@ public class Profit {
 
     public Profit(String article, Double january, Double february, Double march, Double april, Double may,
                   Double june, Double july, Double august, Double september, Double october, Double november,
-                  Double december, Double sum) {
+                  Double december, Double year) {
         this.article = article;
         this.january = january;
         this.february = february;
@@ -50,25 +50,25 @@ public class Profit {
         this.october = october;
         this.november = november;
         this.december = december;
-        this.sum = sum;
+        this.year = year;
     }
 
     public static Profit of(String article, Double january, Double february, Double march, Double april, Double may,
                             Double june, Double july, Double august, Double september, Double october, Double november,
-                            Double december, Double sum) {
+                            Double december, Double year) {
         return new Profit(article, january, february, march, april, may, june, july, august,
-                september, october, november, december,sum);
+                september, october, november, december,year);
     }
 
     public ProfitDTO toDTO() {
         return ProfitDTO.of(id,article, january, february, march, april, may, june, july, august,
-                september, october, november, december, sum);
+                september, october, november, december, year);
     }
 
     public static Profit fromDTO(ProfitDTO profitDTO)  {
         return Profit.of(profitDTO.getArticle(),profitDTO.getJanuary(),profitDTO.getFebruary(),profitDTO.getMarch(),profitDTO.getApril(),
                 profitDTO.getMay(), profitDTO.getJune(),profitDTO.getJuly(), profitDTO.getAugust(), profitDTO.getSeptember(), profitDTO.getOctober(),
-                profitDTO.getNovember(), profitDTO.getDecember(), profitDTO.getSum());
+                profitDTO.getNovember(), profitDTO.getDecember(), profitDTO.getYear());
     }
 
     public Long getId() {
@@ -183,12 +183,12 @@ public class Profit {
         this.december = december;
     }
 
-    public Double getSum() {
-        return sum;
+    public Double getYear() {
+        return year;
     }
 
-    public void setSum(Double sum) {
-        this.sum = sum;
+    public void setYear(Double year) {
+        this.year = year;
     }
 
     public Account getAccountProfit() {

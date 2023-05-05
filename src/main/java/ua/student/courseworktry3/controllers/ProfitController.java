@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import ua.student.courseworktry3.Exception.AlreadyExistException;
 import ua.student.courseworktry3.Exception.DBIsEmptyException;
 import ua.student.courseworktry3.Exception.NotFoundException;
-import ua.student.courseworktry3.dto.ProfitDTO;
 import ua.student.courseworktry3.services.Interface.ProfitService;
 
 
@@ -33,7 +32,7 @@ public class ProfitController {
     }
 
     @GetMapping("/one/{article}")
-    public ResponseEntity getOne(@PathVariable String article,OAuth2AuthenticationToken auth) {
+    public ResponseEntity getOne(@PathVariable String article, OAuth2AuthenticationToken auth) {
         String email = getEmail(auth);
         try {
             return ResponseEntity.ok(profitService.findByArticle(article));
@@ -45,9 +44,9 @@ public class ProfitController {
     }
 
     @GetMapping("/total")
-    public ResponseEntity to (OAuth2AuthenticationToken auth){
+    public ResponseEntity to(OAuth2AuthenticationToken auth) {
         String email = getEmail(auth);
-        try{
+        try {
             return ResponseEntity.ok(profitService.getAllTotalProfit(email));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Warning!!! Server request exception!");
@@ -57,17 +56,17 @@ public class ProfitController {
 
     @PostMapping("/save")
     public ResponseEntity addProfit(@RequestParam(required = true) String article, @RequestParam(required = false) Double january,
-                                 @RequestParam(required = false) Double february, @RequestParam(required = false) Double march,
-                                 @RequestParam(required = false) Double april, @RequestParam(required = false) Double may,
-                                 @RequestParam(required = false) Double june, @RequestParam(required = false) Double july,
-                                 @RequestParam(required = false) Double august, @RequestParam(required = false) Double september,
-                                 @RequestParam(required = false) Double october, @RequestParam(required = false) Double november,
-                                 @RequestParam(required = false) Double december,@RequestParam(required = false) Double sum,
-                                     OAuth2AuthenticationToken auth) {
+                                    @RequestParam(required = false) Double february, @RequestParam(required = false) Double march,
+                                    @RequestParam(required = false) Double april, @RequestParam(required = false) Double may,
+                                    @RequestParam(required = false) Double june, @RequestParam(required = false) Double july,
+                                    @RequestParam(required = false) Double august, @RequestParam(required = false) Double september,
+                                    @RequestParam(required = false) Double october, @RequestParam(required = false) Double november,
+                                    @RequestParam(required = false) Double december, @RequestParam(required = false) Double year,
+                                    OAuth2AuthenticationToken auth) {
         String email = getEmail(auth);
         try {
             return ResponseEntity.ok(profitService.addProfit(article, january, february, march, april, may, june, july, august,
-                    september, october, november, december,sum,email));
+                    september, october, november, december, year, email));
         } catch (AlreadyExistException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
@@ -83,12 +82,12 @@ public class ProfitController {
                                  @RequestParam(required = false) Double june, @RequestParam(required = false) Double july,
                                  @RequestParam(required = false) Double august, @RequestParam(required = false) Double september,
                                  @RequestParam(required = false) Double october, @RequestParam(required = false) Double november,
-                                 @RequestParam(required = false) Double december,@RequestParam(required = false) Double sum,
+                                 @RequestParam(required = false) Double december, @RequestParam(required = false) Double year,
                                  OAuth2AuthenticationToken auth) {
         String email = getEmail(auth);
         try {
             profitService.updateProfit(article, january, february, march, april, may, june, july, august,
-                    september, october, november, december,sum ,email);
+                    september, october, november, december, year, email);
             return ResponseEntity.ok("Success!");
         } catch (NotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -106,6 +105,7 @@ public class ProfitController {
             return ResponseEntity.badRequest().body("Line not found!");
         }
     }
+
     private String getEmail(OAuth2AuthenticationToken auth) {
         return (String) auth.getPrincipal().getAttributes().get("email");
     }

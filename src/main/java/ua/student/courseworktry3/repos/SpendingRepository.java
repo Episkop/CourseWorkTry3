@@ -13,7 +13,7 @@ public interface SpendingRepository extends JpaRepository<Spending, Long> {
     List<Spending> findByAccountSpendingEmail(String email);
 
     @Modifying
-    @Query("UPDATE Spending e SET e.sum = e.january + e.february + e.march + e.april + e.may + " +
+    @Query("UPDATE Spending e SET e.year = e.january + e.february + e.march + e.april + e.may + " +
             "e.june + e.july + e.august + e.september + e.october + e.november + e.december WHERE e.article = e.article")
     void sumProfitLine(Double january, Double february, Double march, Double april, Double may,
                        Double june, Double july, Double august, Double september, Double october, Double november,
@@ -43,6 +43,6 @@ public interface SpendingRepository extends JpaRepository<Spending, Long> {
     Double totalNov();
     @Query("SELECT sum (e.december) from Spending e ")
     Double totalDec();
-    @Query("SELECT sum (e.sum) from Spending e ")
+    @Query("SELECT sum (e.year) from Spending e ")
     Double totalSum();
 }

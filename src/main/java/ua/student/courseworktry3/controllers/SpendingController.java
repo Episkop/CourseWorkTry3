@@ -59,12 +59,12 @@ public class SpendingController {
                                      @RequestParam(required = false) Double june, @RequestParam(required = false) Double july,
                                      @RequestParam(required = false) Double august, @RequestParam(required = false) Double september,
                                      @RequestParam(required = false) Double october, @RequestParam(required = false) Double november,
-                                     @RequestParam(required = false) Double december,@RequestParam(required = false) Double sum,
+                                     @RequestParam(required = false) Double december,@RequestParam(required = false) Double year,
                                      OAuth2AuthenticationToken auth) {
         String email = getEmail(auth);
         try {
             return ResponseEntity.ok(spendingService.addSpending(article, january, february, march, april, may, june, july, august,
-                    september, october, november, december,sum,email));
+                    september, october, november, december, year,email));
         } catch (AlreadyExistException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
@@ -80,12 +80,12 @@ public class SpendingController {
                                  @RequestParam(required = false) Double june, @RequestParam(required = false) Double july,
                                  @RequestParam(required = false) Double august, @RequestParam(required = false) Double september,
                                  @RequestParam(required = false) Double october, @RequestParam(required = false) Double november,
-                                 @RequestParam(required = false) Double december,@RequestParam(required = false) Double sum,
+                                 @RequestParam(required = false) Double december,@RequestParam(required = false) Double year,
                                  OAuth2AuthenticationToken auth) {
         String email = getEmail(auth);
         try {
             spendingService.updateSpending(article, january, february, march, april, may, june, july, august,
-                    september, october, november, december,sum ,email);
+                    september, october, november, december, year,email);
             return ResponseEntity.ok("Success!");
         } catch (NotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

@@ -99,7 +99,7 @@ public class ProfitServiceImpl implements ProfitService {
         if (december == null)
             dto.setDecember(0.0);
         if (year == null)
-            dto.setSum(year);
+            dto.setYear(year);
         account.addProfit(Profit.fromDTO(dto));
         return true;
     }
@@ -163,7 +163,7 @@ public class ProfitServiceImpl implements ProfitService {
         if (december != null)
             profit.setDecember(december);
         if (year != null)
-            profit.setSum(year);
+            profit.setYear(year);
         //TODO
         profitRepository.sumProfitLine(january, february, march, april, may, june, july, august,
                 september, october, november, december, article);
@@ -196,7 +196,7 @@ public class ProfitServiceImpl implements ProfitService {
         Double dec = profitRepository.totalDec();
         pte.setDecember(dec);
         Double su = profitRepository.totalSum();
-        pte.setSum(su);
+        pte.setYear(su);
 
         account.addProfitTotal(pte);
         // profitTotalEntityRepository.save(pte);

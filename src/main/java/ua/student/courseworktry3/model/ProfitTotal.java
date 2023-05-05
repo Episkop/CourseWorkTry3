@@ -25,7 +25,7 @@ public class ProfitTotal {
     private Double october;
     private Double november;
     private Double december;
-    private Double sum;
+    private Double year;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "account_id")
@@ -41,7 +41,7 @@ public class ProfitTotal {
 
     public ProfitTotal(String article, Double january, Double february, Double march, Double april, Double may,
                        Double june, Double july, Double august, Double september, Double october, Double november,
-                       Double december, Double sum) {
+                       Double december, Double year) {
         this.article = article;
         this.january = january;
         this.february = february;
@@ -55,7 +55,7 @@ public class ProfitTotal {
         this.october = october;
         this.november = november;
         this.december = december;
-        this.sum = sum;
+        this.year = year;
     }
 
     public ProfitTotal() {
@@ -63,20 +63,20 @@ public class ProfitTotal {
 
     public static ProfitTotal of(String article, Double january, Double february, Double march, Double april, Double may,
                                   Double june, Double july, Double august, Double september, Double october, Double november,
-                                  Double december, Double sum){
+                                  Double december, Double year){
         return new ProfitTotal(article, january, february, march, april, may, june, july, august,
-                september, october, november, december,sum);
+                september, october, november, december,year);
     }
 
     public ProfitTotalDTO toDTO() {
         return ProfitTotalDTO.of(id,article, january, february, march, april, may, june, july, august,
-                september, october, november, december,sum);
+                september, october, november, december, year);
     }
 
     public static ProfitTotal fromDTO(ProfitTotalDTO profitTotalDTO){
         return ProfitTotal.of(profitTotalDTO.getArticle(),profitTotalDTO.getJanuary(),profitTotalDTO.getFebruary(),profitTotalDTO.getMarch(),profitTotalDTO.getApril(),
                 profitTotalDTO.getMay(), profitTotalDTO.getJune(),profitTotalDTO.getJuly(), profitTotalDTO.getAugust(), profitTotalDTO.getSeptember(), profitTotalDTO.getOctober(),
-                profitTotalDTO.getNovember(), profitTotalDTO.getDecember(), profitTotalDTO.getSum());
+                profitTotalDTO.getNovember(), profitTotalDTO.getDecember(), profitTotalDTO.getYear());
     }
 
     public Long getId() {
@@ -190,11 +190,11 @@ public class ProfitTotal {
         this.december = december;
     }
 
-    public Double getSum() {
-        return sum;
+    public Double getYear() {
+        return year;
     }
 
-    public void setSum(Double sum) {
-        this.sum = sum;
+    public void setYear(Double year) {
+        this.year = year;
     }
 }

@@ -15,11 +15,11 @@ public class SpendingDTO {
     private Double october;
     private Double november;
     private Double december;
-    private Double sum;
+    private Double year;
 
     public SpendingDTO(Long id, String article, Double january, Double february, Double march, Double april,
                        Double may, Double june, Double july, Double august, Double september, Double october,
-                       Double november, Double december, Double sum) {
+                       Double november, Double december, Double year) {
         this.id = id;
         this.article = article;
         this.january = january;
@@ -34,11 +34,11 @@ public class SpendingDTO {
         this.october = october;
         this.november = november;
         this.december = december;
-        this.sum = sum;
+        this.year = year;
     }
     public SpendingDTO( String article, Double january, Double february, Double march, Double april,
                        Double may, Double june, Double july, Double august, Double september, Double october,
-                       Double november, Double december, Double sum) {
+                       Double november, Double december, Double year) {
         this.article = article;
         this.january = january;
         this.february = february;
@@ -52,23 +52,23 @@ public class SpendingDTO {
         this.october = october;
         this.november = november;
         this.december = december;
-        this.sum = sum;
+        this.year = year;
     }
     public SpendingDTO() {
     }
 
     public static SpendingDTO of(String article, Double january, Double february, Double march, Double april, Double may,
                                    Double june, Double july, Double august, Double september, Double october, Double november,
-                                   Double december, Double sum) {
+                                   Double december, Double year) {
         return new SpendingDTO( article, january, february, march, april, may, june, july, august,
-                september, october, november, december, sum);
+                september, october, november, december, year);
     }
 
     public static SpendingDTO of(Long id, String article, Double january, Double february, Double march, Double april, Double may,
                                    Double june, Double july, Double august, Double september, Double october, Double november,
-                                   Double december, Double sum) {
+                                   Double december, Double year) {
         return new SpendingDTO(id, article, january, february, march, april, may, june, july, august,
-                september, october, november, december, sum);
+                september, october, november, december, year);
 
     }
 
@@ -184,11 +184,11 @@ public class SpendingDTO {
         this.december = december;
     }
 
-    public Double getSum() {
-        return sum;
+    public Double getYear() {
+        return year;
     }
 
-    public void setSum(Double sum) {
-        this.sum = sum;
+    public void setYear(Double year) {
+        this.year = year;
     }
 }

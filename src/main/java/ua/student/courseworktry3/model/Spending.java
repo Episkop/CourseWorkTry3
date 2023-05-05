@@ -26,7 +26,7 @@ public class Spending {
     private Double october;
     private Double november;
     private Double december;
-    private Double sum;
+    private Double year;
 
     @ManyToOne
     @JoinColumn(name = "account_id")
@@ -35,7 +35,7 @@ public class Spending {
 
     public Spending(String article, Double january, Double february, Double march, Double april, Double may,
                     Double june, Double july, Double august, Double september, Double october, Double november,
-                    Double december, Double sum) {
+                    Double december, Double year) {
         this.article = article;
         this.january = january;
         this.february = february;
@@ -49,7 +49,7 @@ public class Spending {
         this.october = october;
         this.november = november;
         this.december = december;
-        this.sum = sum;
+        this.year = year;
     }
     public static Spending of(String article, Double january, Double february, Double march, Double april, Double may,
                                   Double june, Double july, Double august, Double september, Double october, Double november,
@@ -60,13 +60,13 @@ public class Spending {
 
     public SpendingDTO toDTO() {
         return SpendingDTO.of(id,article, january, february, march, april, may, june, july, august,
-                september, october, november, december,sum);
+                september, october, november, december, year);
     }
 
     public static Spending fromDTO (SpendingDTO spendingDTO){
         return Spending.of(spendingDTO.getArticle(),spendingDTO.getJanuary(),spendingDTO.getFebruary(),spendingDTO.getMarch(),spendingDTO.getApril(),
                 spendingDTO.getMay(), spendingDTO.getJune(),spendingDTO.getJuly(), spendingDTO.getAugust(), spendingDTO.getSeptember(), spendingDTO.getOctober(),
-                spendingDTO.getNovember(), spendingDTO.getDecember(), spendingDTO.getSum());
+                spendingDTO.getNovember(), spendingDTO.getDecember(), spendingDTO.getYear());
     }
     public Spending() {
     }
@@ -127,8 +127,8 @@ public class Spending {
         this.december = december;
     }
 
-    public void setSum(Double sum) {
-        this.sum = sum;
+    public void setYear(Double year) {
+        this.year = year;
     }
 
     public void setAccountSpending(Account accountSpending) {

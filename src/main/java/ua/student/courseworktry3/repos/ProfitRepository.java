@@ -18,7 +18,7 @@ public interface ProfitRepository extends JpaRepository<Profit, Long> {
 
 
     @Modifying
-    @Query("UPDATE Profit e SET e.sum = e.january + e.february + e.march + e.april + e.may + " +
+    @Query("UPDATE Profit e SET e.year = e.january + e.february + e.march + e.april + e.may + " +
             "e.june + e.july + e.august + e.september + e.october + e.november + e.december WHERE e.article = e.article")
     void sumProfitLine(Double january, Double february, Double march, Double april, Double may,
                        Double june, Double july, Double august, Double september, Double october, Double november,
@@ -48,6 +48,6 @@ public interface ProfitRepository extends JpaRepository<Profit, Long> {
     Double totalNov();
     @Query("SELECT sum (e.december) from Profit e ")
     Double totalDec();
-    @Query("SELECT sum (e.sum) from Profit e ")
+    @Query("SELECT sum (e.year) from Profit e ")
     Double totalSum();
 }

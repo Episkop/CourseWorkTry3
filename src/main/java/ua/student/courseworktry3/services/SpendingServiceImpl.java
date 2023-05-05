@@ -45,39 +45,39 @@ public class SpendingServiceImpl implements SpendingService {
     @Override
     public boolean addSpending(String article, Double january, Double february, Double march, Double april, Double may,
                                Double june, Double july, Double august, Double september, Double october, Double november,
-                               Double december, Double sum, String email) throws AlreadyExistException {
+                               Double december, Double year, String email) throws AlreadyExistException {
         Account account = accountRepository.findByEmail(email);
         if (spendingRepository.existsByArticle(article))
             return  false;
-        SpendingDTO model = new SpendingDTO(article, january, february, march, april, may, june, july, august,
-                september, october, november, december,sum);
+        SpendingDTO dto = new SpendingDTO(article, january, february, march, april, may, june, july, august,
+                september, october, november, december,year);
         if (january == null)
-            model.setJanuary(0.0);
+            dto.setJanuary(0.0);
         if (february == null)
-            model.setFebruary(0.0);
+            dto.setFebruary(0.0);
         if (march == null)
-            model.setMarch(0.0);
+            dto.setMarch(0.0);
         if (april == null)
-            model.setApril(0.0);
+            dto.setApril(0.0);
         if (may == null)
-            model.setMay(0.0);
+            dto.setMay(0.0);
         if (june == null)
-            model.setJune(0.0);
+            dto.setJune(0.0);
         if (july == null)
-            model.setJuly(0.0);
+            dto.setJuly(0.0);
         if (august == null)
-            model.setAugust(0.0);
+            dto.setAugust(0.0);
         if (september == null)
-            model.setSeptember(0.0);
+            dto.setSeptember(0.0);
         if (october == null)
-            model.setOctober(0.0);
+            dto.setOctober(0.0);
         if (november == null)
-            model.setNovember(0.0);
+            dto.setNovember(0.0);
         if (december == null)
-            model.setDecember(0.0);
-        if (sum == null)
-            model.setSum(sum);
-        account.addSpending(Spending.fromDTO(model));
+            dto.setDecember(0.0);
+        if (year == null)
+            dto.setYear(year);
+        account.addSpending(Spending.fromDTO(dto));
         return true;
     }
 //
@@ -107,7 +107,7 @@ public class SpendingServiceImpl implements SpendingService {
     @Override
     public boolean updateSpending(String article, Double january, Double february, Double march, Double april, Double may,
                                   Double june, Double july, Double august, Double september, Double october, Double november,
-                                  Double december, Double sum, String email) throws NotFoundException {
+                                  Double december, Double year, String email) throws NotFoundException {
         Account account = accountRepository.findByEmail(email);
         if (spendingRepository.existsByArticle(article))
             return  false;
@@ -116,7 +116,7 @@ public class SpendingServiceImpl implements SpendingService {
 //            throw new NotFoundException("Such " + article + " don`t found");
 //        }
         SpendingDTO spending = new SpendingDTO(article, january, february, march, april, may, june, july, august,
-                september, october, november, december,sum);
+                september, october, november, december,year);
         if (january != null)
             spending.setJanuary(january);
         if (february != null)
@@ -141,8 +141,8 @@ public class SpendingServiceImpl implements SpendingService {
             spending.setNovember(november);
         if (december != null)
             spending.setDecember(december);
-        if (sum != null)
-            spending.setSum(sum);
+        if (year != null)
+            spending.setYear(year);
         //TODO
         spendingRepository.sumProfitLine(january, february, march, april, may, june, july, august,
                 september, october, november, december,article);
@@ -175,7 +175,7 @@ public class SpendingServiceImpl implements SpendingService {
         Double dec = spendingRepository.totalDec();
         pte.setDecember(dec);
         Double su = spendingRepository.totalSum();
-        pte.setSum(su);
+        pte.setYear(su);
 
         account.addSpendingTotal(pte);
         // profitTotalEntityRepository.save(pte);

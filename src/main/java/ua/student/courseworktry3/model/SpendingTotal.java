@@ -25,7 +25,7 @@ public class SpendingTotal {
     private Double october;
     private Double november;
     private Double december;
-    private Double sum;
+    private Double year;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "account_id")
@@ -41,7 +41,7 @@ public class SpendingTotal {
 
     public SpendingTotal(String article, Double january, Double february, Double march, Double april, Double may,
                          Double june, Double july, Double august, Double september, Double october, Double november,
-                         Double december, Double sum) {
+                         Double december, Double year) {
         this.article = article;
         this.january = january;
         this.february = february;
@@ -55,7 +55,7 @@ public class SpendingTotal {
         this.october = october;
         this.november = november;
         this.december = december;
-        this.sum = sum;
+        this.year = year;
     }
 
     public SpendingTotal() {
@@ -63,20 +63,20 @@ public class SpendingTotal {
 
     public static SpendingTotal of(String article, Double january, Double february, Double march, Double april, Double may,
                                    Double june, Double july, Double august, Double september, Double october, Double november,
-                                   Double december, Double sum){
+                                   Double december, Double year){
         return new SpendingTotal(article, january, february, march, april, may, june, july, august,
-                september, october, november, december,sum);
+                september, october, november, december,year);
     }
 
     public SpendingTotalDTO toDTO() {
         return SpendingTotalDTO.of(id,article, january, february, march, april, may, june, july, august,
-                september, october, november, december,sum);
+                september, october, november, december, year);
     }
 
     public static SpendingTotal fromDTO(SpendingTotalDTO spendingTotalDTO){
         return SpendingTotal.of(spendingTotalDTO.getArticle(),spendingTotalDTO.getJanuary(),spendingTotalDTO.getFebruary(),spendingTotalDTO.getMarch(),spendingTotalDTO.getApril(),
                 spendingTotalDTO.getMay(), spendingTotalDTO.getJune(),spendingTotalDTO.getJuly(), spendingTotalDTO.getAugust(), spendingTotalDTO.getSeptember(), spendingTotalDTO.getOctober(),
-                spendingTotalDTO.getNovember(), spendingTotalDTO.getDecember(), spendingTotalDTO.getSum());
+                spendingTotalDTO.getNovember(), spendingTotalDTO.getDecember(), spendingTotalDTO.getYear());
     }
 
     public Long getId() {
@@ -191,11 +191,11 @@ public class SpendingTotal {
         this.december = december;
     }
 
-    public Double getSum() {
-        return sum;
+    public Double getYear() {
+        return year;
     }
 
-    public void setSum(Double sum) {
-        this.sum = sum;
+    public void setYear(Double year) {
+        this.year = year;
     }
 }
