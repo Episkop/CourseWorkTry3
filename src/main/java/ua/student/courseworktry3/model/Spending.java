@@ -53,13 +53,13 @@ public class Spending {
     }
     public static Spending of(String article, Double january, Double february, Double march, Double april, Double may,
                                   Double june, Double july, Double august, Double september, Double october, Double november,
-                                  Double december, Double sum){
+                                  Double december, Double year){
         return new Spending(article, january, february, march, april, may, june, july, august,
-                september, october, november, december,sum);
+                september, october, november, december,year);
     }
 
     public SpendingDTO toDTO() {
-        return SpendingDTO.of(id,article, january, february, march, april, may, june, july, august,
+        return SpendingDTO.of(article, january, february, march, april, may, june, july, august,
                 september, october, november, december, year);
     }
 

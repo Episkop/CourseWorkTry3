@@ -61,7 +61,7 @@ public class Profit {
     }
 
     public ProfitDTO toDTO() {
-        return ProfitDTO.of(id,article, january, february, march, april, may, june, july, august,
+        return ProfitDTO.of(article, january, february, march, april, may, june, july, august,
                 september, october, november, december, year);
     }
 

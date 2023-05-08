@@ -8,7 +8,6 @@ import ua.student.courseworktry3.Exception.DBIsEmptyException;
 import ua.student.courseworktry3.Exception.NotFoundException;
 import ua.student.courseworktry3.services.Interface.ProfitService;
 
-
 @RestController
 @RequestMapping("/profit")
 public class ProfitController {
@@ -35,7 +34,7 @@ public class ProfitController {
     public ResponseEntity getOne(@PathVariable String article, OAuth2AuthenticationToken auth) {
         String email = getEmail(auth);
         try {
-            return ResponseEntity.ok(profitService.findByArticle(article));
+            return ResponseEntity.ok(profitService.findByArticle(article,email));
         } catch (NotFoundException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
@@ -52,7 +51,6 @@ public class ProfitController {
             return ResponseEntity.badRequest().body("Warning!!! Server request exception!");
         }
     }
-
 
     @PostMapping("/save")
     public ResponseEntity addProfit(@RequestParam(required = true) String article, @RequestParam(required = false) Double january,
@@ -95,12 +93,33 @@ public class ProfitController {
             return ResponseEntity.badRequest().body("Warning!!! Server request exception!");
         }
     }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity delete(@PathVariable Long id) {
+    @PostMapping("/startUp")
+    public ResponseEntity startUp(@RequestParam(required = true) String article, @RequestParam(required = false) Double january,
+                                  @RequestParam(required = false) Double february, @RequestParam(required = false) Double march,
+                                  @RequestParam(required = false) Double april, @RequestParam(required = false) Double may,
+                                  @RequestParam(required = false) Double june, @RequestParam(required = false) Double july,
+                                  @RequestParam(required = false) Double august, @RequestParam(required = false) Double september,
+                                  @RequestParam(required = false) Double october, @RequestParam(required = false) Double november,
+                                  @RequestParam(required = false) Double december,@RequestParam(required = false) Double year,
+                                  OAuth2AuthenticationToken auth) {
+        String email = getEmail(auth);
         try {
-            profitService.deleteProfit(id);
-            return ResponseEntity.ok("Successes! The line was deleted! " + id);
+            profitService.startUpCapital(article, january, february, march, april, may, june, july, august,
+                    september, october, november, december, year,email );
+            return ResponseEntity.ok("Success");
+        } catch (NotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Warning!!! Line didn`t save");
+        }
+    }
+
+    @DeleteMapping("/delete/{article}")
+    public ResponseEntity delete(@PathVariable String article, OAuth2AuthenticationToken auth) {
+        String email = getEmail(auth);
+        try {
+            profitService.deleteProfit(email,article);
+            return ResponseEntity.ok("Successes! The line was deleted! " + article);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Line not found!");
         }

@@ -40,14 +40,16 @@ public class AuthHandler implements AuthenticationSuccessHandler {
                 (String) attributes.get("picture")
         );
 
-        List<ProfitDTO> profit = Arrays.asList(
+        List<ProfitDTO> profitDTO = Arrays.asList(
+                ProfitDTO.of("Opening balance",0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
+                ProfitDTO.of("Balance at the beginning", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
                 ProfitDTO.of("Salary", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
                 ProfitDTO.of("Credit", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
                 ProfitDTO.of("Deposit interest", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
                 ProfitDTO.of("Gifts", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
                 ProfitDTO.of("Sell", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
         );
-        List<SpendingDTO> spending = Arrays.asList(
+        List<SpendingDTO> spendingDTO = Arrays.asList(
                 SpendingDTO.of("Rental of property", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
                 SpendingDTO.of("Communal expenses", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
                 SpendingDTO.of("Products", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
@@ -59,11 +61,11 @@ public class AuthHandler implements AuthenticationSuccessHandler {
                 SpendingDTO.of("Other", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
                 SpendingDTO.of("Credit", 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
         );
-        ProfitTotalDTO totalProfitDTO = ProfitTotalDTO.of("total",0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+        ProfitTotalDTO totalProfitDTO = ProfitTotalDTO.of("Total incomes",0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
-        SpendingTotalDTO totalSpendingDTO = SpendingTotalDTO.of("total",0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+        SpendingTotalDTO totalSpendingDTO = SpendingTotalDTO.of("Total expenses",0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
-        generalService.addAccount(accountDTO, profit, spending, totalProfitDTO, totalSpendingDTO);
+        generalService.addAccount(accountDTO, profitDTO, spendingDTO, totalProfitDTO, totalSpendingDTO);
 
         httpServletResponse.sendRedirect("/");
     }

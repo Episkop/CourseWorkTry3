@@ -6,7 +6,6 @@ import ua.student.courseworktry3.Exception.DBIsEmptyException;
 import ua.student.courseworktry3.Exception.NotFoundException;
 import ua.student.courseworktry3.dto.SpendingDTO;
 import ua.student.courseworktry3.dto.SpendingTotalDTO;
-import ua.student.courseworktry3.model.Spending;
 
 
 import java.util.List;
@@ -21,16 +20,15 @@ public interface SpendingService {
                         Double june, Double july, Double august, Double september, Double october, Double november,
                         Double december, Double sum, String email) throws AlreadyExistException;
 
+    SpendingDTO findByArticle(String article, String email) throws NotFoundException, DBIsEmptyException;
 
-    Spending findByArticle(String article) throws NotFoundException;
-
-
-
-    List<SpendingTotalDTO> getTotal(String email) throws DBIsEmptyException;
+    List<SpendingTotalDTO> getAllTotalSpending(String email) throws DBIsEmptyException;
 
     boolean updateSpending(String article, Double january, Double february, Double march, Double april, Double may,
                            Double june, Double july, Double august, Double september, Double october, Double november,
                            Double december, Double sum, String email) throws NotFoundException;
 
-    void deleteSpending(Long id) throws NotFoundException;
+    void countSum(String email);
+
+    void deleteSpending(String email, String article) throws NotFoundException;
 }

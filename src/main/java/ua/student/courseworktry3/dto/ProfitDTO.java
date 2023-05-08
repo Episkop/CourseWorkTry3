@@ -1,7 +1,7 @@
 package ua.student.courseworktry3.dto;
 
 public class ProfitDTO {
-    private Long id;
+//    private Long id;
     private String article;
     private Double january;
     private Double february;
@@ -17,25 +17,25 @@ public class ProfitDTO {
     private Double december;
     private Double year;
 
-    public ProfitDTO(Long id, String article, Double january, Double february, Double march, Double april,
-                     Double may, Double june, Double july, Double august, Double september, Double october,
-                     Double november, Double december, Double year) {
-        this.id = id;
-        this.article = article;
-        this.january = january;
-        this.february = february;
-        this.march = march;
-        this.april = april;
-        this.may = may;
-        this.june = june;
-        this.july = july;
-        this.august = august;
-        this.september = september;
-        this.october = october;
-        this.november = november;
-        this.december = december;
-        this.year = year;
-    }
+//    public ProfitDTO(Long id, String article, Double january, Double february, Double march, Double april,
+//                     Double may, Double june, Double july, Double august, Double september, Double october,
+//                     Double november, Double december, Double year) {
+//        this.id = id;
+//        this.article = article;
+//        this.january = january;
+//        this.february = february;
+//        this.march = march;
+//        this.april = april;
+//        this.may = may;
+//        this.june = june;
+//        this.july = july;
+//        this.august = august;
+//        this.september = september;
+//        this.october = october;
+//        this.november = november;
+//        this.december = december;
+//        this.year = year;
+//    }
     public ProfitDTO(String article, Double january, Double february, Double march, Double april,
                      Double may, Double june, Double july, Double august, Double september, Double october,
                      Double november, Double december, Double year) {
@@ -61,20 +61,20 @@ public class ProfitDTO {
         return new ProfitDTO(article, january, february, march, april, may, june, july, august,
                 september, october, november, december,year);
     }
-    public static ProfitDTO of(Long id,String article, Double january, Double february, Double march, Double april, Double may,
-                               Double june, Double july, Double august, Double september, Double october, Double november,
-                               Double december, Double year) {
-        return new ProfitDTO(id,article, january, february, march, april, may, june, july, august,
-                september, october, november, december,year);
-    }
+//    public static ProfitDTO of(Long id,String article, Double january, Double february, Double march, Double april, Double may,
+//                               Double june, Double july, Double august, Double september, Double october, Double november,
+//                               Double december, Double year) {
+//        return new ProfitDTO(id,article, january, february, march, april, may, june, july, august,
+//                september, october, november, december,year);
+//    }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
 
     public String getArticle() {
         return article;

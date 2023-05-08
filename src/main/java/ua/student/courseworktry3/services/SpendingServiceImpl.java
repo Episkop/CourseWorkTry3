@@ -18,18 +18,18 @@ import ua.student.courseworktry3.services.Interface.SpendingService;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Service
 public class SpendingServiceImpl implements SpendingService {
     private final SpendingRepository spendingRepository;
     private final AccountRepository accountRepository;
     private final SpendingTotalRepository spendingTotalRepository;
-
+    private final ProfitServiceImpl profitService;
     public SpendingServiceImpl(SpendingRepository spendingRepository, AccountRepository accountRepository,
-                               SpendingTotalRepository spendingTotalRepository) {
+                               SpendingTotalRepository spendingTotalRepository, ProfitServiceImpl profitService) {
         this.spendingRepository = spendingRepository;
         this.accountRepository = accountRepository;
         this.spendingTotalRepository = spendingTotalRepository;
+        this.profitService = profitService;
     }
     @Transactional(readOnly = true)
     @Override
@@ -38,6 +38,16 @@ public class SpendingServiceImpl implements SpendingService {
         List<Spending> list = spendingRepository.findByAccountSpendingEmail(email);
         if (list.isEmpty())
             throw new DBIsEmptyException("Data Base is empty!");
+        list.forEach(x -> modelList.add(x.toDTO()));
+        return modelList;
+    }
+    @Transactional
+    @Override
+    public List<SpendingTotalDTO> getAllTotalSpending(String email) throws DBIsEmptyException {
+        List<SpendingTotalDTO> modelList = new ArrayList<>();
+        List<SpendingTotal> list = spendingTotalRepository.findByAccountSpendingTotalEmail(email);
+        if (list.isEmpty())
+            throw new DBIsEmptyException("Data Base Total is empty!");
         list.forEach(x -> modelList.add(x.toDTO()));
         return modelList;
     }
@@ -78,29 +88,30 @@ public class SpendingServiceImpl implements SpendingService {
         if (year == null)
             dto.setYear(year);
         account.addSpending(Spending.fromDTO(dto));
+        countSum(email);
+        for (int i = 0; i < 12; i++) {
+            for (int j = 0; j < 1; j++) {
+                profitService.countSum(email);
+            }
+            profitService.balance(email);
+        }
+        spendingRepository.sumSpendingLine(january, february, march, april, may, june, july, august,
+                september, october, november, december, article);
+        countSum(email);
+        profitService.countSum(email);
+        profitService.countSumLine(email);
         return true;
     }
-//
 
     @Transactional(readOnly = true)
     @Override
-    public Spending findByArticle(String article) throws NotFoundException {
-        Spending spending = spendingRepository.findByArticle(article);
-        if (spending == null) {
-            throw new NotFoundException("Didn`t find article " + spending.getArticle());
+    public SpendingDTO findByArticle(String article, String email) throws NotFoundException, DBIsEmptyException {
+        List<Spending> list = spendingRepository.findByAccountSpendingEmail(email);
+        if (list.isEmpty()) {
+            throw new DBIsEmptyException("Data Base is empty!");
         }
-        return spending;
-    }
-
-    @Transactional
-    @Override
-    public List<SpendingTotalDTO> getTotal(String email) throws DBIsEmptyException {
-        List<SpendingTotalDTO> modelList = new ArrayList<>();
-        List<SpendingTotal> list = spendingTotalRepository.findByAccountSpendingTotalEmail(email);
-        if (list.isEmpty())
-            throw new DBIsEmptyException("Data Base Total is empty!");
-        list.forEach(x -> modelList.add(x.toDTO()));
-        return modelList;
+        Spending spending = list.stream().filter(x -> x.getArticle().equalsIgnoreCase(article)).findAny().orElse(null);
+        return spending.toDTO();
     }
 
     @Transactional
@@ -108,15 +119,10 @@ public class SpendingServiceImpl implements SpendingService {
     public boolean updateSpending(String article, Double january, Double february, Double march, Double april, Double may,
                                   Double june, Double july, Double august, Double september, Double october, Double november,
                                   Double december, Double year, String email) throws NotFoundException {
-        Account account = accountRepository.findByEmail(email);
-        if (spendingRepository.existsByArticle(article))
-            return  false;
-//        ProfitDTO profit = profitRepository.findByArticle(article);
-//        if (profit == null) {
-//            throw new NotFoundException("Such " + article + " don`t found");
-//        }
-        SpendingDTO spending = new SpendingDTO(article, january, february, march, april, may, june, july, august,
-                september, october, november, december,year);
+        Spending spending = spendingRepository.findByAccountSpendingEmailAndArticle(email,article);
+        if (spending == null) {
+            throw new NotFoundException("Such " + article + " don`t found");
+        }
         if (january != null)
             spending.setJanuary(january);
         if (february != null)
@@ -141,51 +147,70 @@ public class SpendingServiceImpl implements SpendingService {
             spending.setNovember(november);
         if (december != null)
             spending.setDecember(december);
-        if (year != null)
-            spending.setYear(year);
-        //TODO
-        spendingRepository.sumProfitLine(january, february, march, april, may, june, july, august,
-                september, october, november, december,article);
-        account.addSpending(Spending.fromDTO(spending));
-//        profitRepository.save(profit);
 
-        SpendingTotal pte = spendingTotalRepository.findByArticle("total");
-        Double jan = spendingRepository.totalJan();
-        pte.setJanuary(jan);
-        Double feb = spendingRepository.totalFeb();
-        pte.setFebruary(feb);
-        Double mar = spendingRepository.totalMar();
-        pte.setMarch(mar);
-        Double apr = spendingRepository.totalApr();
-        pte.setApril(apr);
-        Double ma = spendingRepository.totalMay();
-        pte.setMay(ma);
-        Double jun = spendingRepository.totalJun();
-        pte.setJune(jun);
-        Double jul = spendingRepository.totalJul();
-        pte.setJuly(jul);
-        Double aug = spendingRepository.totalAug();
-        pte.setAugust(aug);
-        Double sep = spendingRepository.totalSep();
-        pte.setSeptember(sep);
-        Double oct = spendingRepository.totalOct();
-        pte.setOctober(oct);
-        Double nov = spendingRepository.totalNov();
-        pte.setNovember(nov);
-        Double dec = spendingRepository.totalDec();
-        pte.setDecember(dec);
-        Double su = spendingRepository.totalSum();
-        pte.setYear(su);
-
-        account.addSpendingTotal(pte);
-        // profitTotalEntityRepository.save(pte);
+        countSum(email);
+        for (int i = 0; i < 12; i++) {
+            for (int j = 0; j < 1; j++) {
+                profitService.countSum(email);
+            }
+            profitService.balance(email);
+        }
+        spendingRepository.sumSpendingLine(january, february, march, april, may, june, july, august,
+                september, october, november, december, article);
+        countSum(email);
+        profitService.countSum(email);
+        profitService.countSumLine(email);
+        spendingRepository.save(spending);
         return true;
     }
 
     @Transactional
     @Override
-    public void deleteSpending(Long id) throws NotFoundException{
-        spendingRepository.deleteById(id);
+    public void countSum(String email) {
+        SpendingTotal ste = spendingTotalRepository.findByAccountSpendingTotalEmailAndArticle(email,"Total expenses");
+        Double jan = spendingRepository.totalJan();
+        ste.setJanuary(jan);
+        Double feb = spendingRepository.totalFeb();
+        ste.setFebruary(feb);
+        Double mar = spendingRepository.totalMar();
+        ste.setMarch(mar);
+        Double apr = spendingRepository.totalApr();
+        ste.setApril(apr);
+        Double ma = spendingRepository.totalMay();
+        ste.setMay(ma);
+        Double jun = spendingRepository.totalJun();
+        ste.setJune(jun);
+        Double jul = spendingRepository.totalJul();
+        ste.setJuly(jul);
+        Double aug = spendingRepository.totalAug();
+        ste.setAugust(aug);
+        Double sep = spendingRepository.totalSep();
+        ste.setSeptember(sep);
+        Double oct = spendingRepository.totalOct();
+        ste.setOctober(oct);
+        Double nov = spendingRepository.totalNov();
+        ste.setNovember(nov);
+        Double dec = spendingRepository.totalDec();
+        ste.setDecember(dec);
+        Double su = spendingRepository.totalYear();
+        ste.setYear(su);
+        spendingTotalRepository.save(ste);
+    }
+
+    @Transactional
+    @Override
+    public void deleteSpending(String email, String article) throws NotFoundException {
+       spendingRepository.findByAccountSpendingEmailAndArticle(email,article);
+        spendingRepository.deleteSpendingByArticle(article);
+
+        countSum(email);
+        for (int i = 0; i < 12; i++) {
+            for (int j = 0; j < 1; j++) {
+                profitService.countSum(email);
+            }
+            profitService.balance(email);
+        }
+       profitService.countSumLine(email);
     }
 }
 

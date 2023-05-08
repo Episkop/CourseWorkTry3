@@ -15,7 +15,6 @@ import ua.student.courseworktry3.repos.ProfitRepository;
 import ua.student.courseworktry3.repos.ProfitTotalRepository;
 import ua.student.courseworktry3.services.Interface.ProfitService;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +42,7 @@ public class ProfitServiceImpl implements ProfitService {
         list.forEach(x -> modelList.add(x.toDTO()));
         return modelList;
     }
+
     @Transactional(readOnly = true)
     @Override
     public List<ProfitTotalDTO> getAllTotalProfit(String email) throws DBIsEmptyException {
@@ -53,16 +53,6 @@ public class ProfitServiceImpl implements ProfitService {
         list.forEach(x -> modelList.add(x.toDTO()));
         return modelList;
     }
-//    @Transactional(readOnly = true)
-//    @Override
-//    public List<ProfitTotalDTO> getAllTotalProfit() throws DBIsEmptyException {
-//        List<ProfitTotalDTO> modelList = new ArrayList<>();
-//        List<ProfitTotal> list = profitTotalRepository.findAll();
-//        if (list.isEmpty())
-//            throw new DBIsEmptyException("Data Base is empty!");
-//        list.forEach(x -> modelList.add(x.toDTO()));
-//        return modelList;
-//    }
 
     @Transactional
     @Override
@@ -101,26 +91,24 @@ public class ProfitServiceImpl implements ProfitService {
         if (year == null)
             dto.setYear(year);
         account.addProfit(Profit.fromDTO(dto));
+        for (int i = 0; i < 12; i++) {
+            for (int j = 0; j < 1; j++) {
+                countSum(email);
+            }
+            balance(email);
+        }
+        countSumLine(email);
         return true;
     }
-//    @Transactional
-//    @Override
-//    public boolean addProfitTotal(ProfitTotalDTO profitTotalDTO, String email) {
-//        Account account = accountRepository.findByEmail(email);
-//        if (profitTotalRepository.existsByArticle(profitTotalDTO.getArticle()))
-//            return false;
-//        ProfitTotal profitTotal = ProfitTotal.fromDTO(profitTotalDTO);
-//        profitTotalRepository.save(profitTotal);
-//        return true;
-//    }
 
     @Transactional(readOnly = true)
     @Override
-    public ProfitDTO findByArticle(String article) throws NotFoundException {
-        Profit profit = profitRepository.findByArticle(article);
-        if (profit == null) {
-            throw new NotFoundException("Didn`t find article " + profit.getArticle());
+    public ProfitDTO findByArticle(String article, String email) throws NotFoundException, DBIsEmptyException {
+        List<Profit> list = profitRepository.findByAccountProfitEmail(email);
+        if (list.isEmpty()) {
+            throw new DBIsEmptyException("Data Base is empty!");
         }
+        Profit profit = list.stream().filter(x -> x.getArticle().equalsIgnoreCase(article)).findAny().orElse(null);
         return profit.toDTO();
     }
 
@@ -129,15 +117,16 @@ public class ProfitServiceImpl implements ProfitService {
     public boolean updateProfit(String article, Double january, Double february, Double march, Double april, Double may,
                                 Double june, Double july, Double august, Double september, Double october, Double november,
                                 Double december, Double year, String email) throws NotFoundException {
-        Account account = accountRepository.findByEmail(email);
-        if (profitRepository.existsByArticle(article))
-            return false;
-//        ProfitDTO profit = profitRepository.findByArticle(article);
-//        if (profit == null) {
-//            throw new NotFoundException("Such " + article + " don`t found");
-//        }
-        ProfitDTO profit = new ProfitDTO(article, january, february, march, april, may, june, july, august,
-                september, october, november, december, year);
+        Profit profit = profitRepository.findByAccountProfitEmailAndArticle(email, article);
+        if (profit == null) {
+            throw new NotFoundException("Such " + article + " don`t found");
+        }
+        if ("Balance at the beginning".equals(profit.getArticle())) {
+            throw new NotFoundException("Such " + article + " don`t found");
+        }
+        if ("Opening balance".equals(profit.getArticle())) {
+            throw new NotFoundException("Such " + article + " don`t found");
+        }
         if (january != null)
             profit.setJanuary(january);
         if (february != null)
@@ -162,15 +151,30 @@ public class ProfitServiceImpl implements ProfitService {
             profit.setNovember(november);
         if (december != null)
             profit.setDecember(december);
-        if (year != null)
-            profit.setYear(year);
-        //TODO
-        profitRepository.sumProfitLine(january, february, march, april, may, june, july, august,
-                september, october, november, december, article);
-        account.addProfit(Profit.fromDTO(profit));
-//        profitRepository.save(profit);
 
-        ProfitTotal pte = profitTotalRepository.findByArticle("total");
+        for (int i = 0; i < 12; i++) {
+            for (int j = 0; j < 1; j++) {
+                countSum(email);
+            }
+            balance(email);
+        }
+        countSumLine(email);
+        profitRepository.save(profit);
+        return true;
+    }
+
+    @Transactional
+    @Override
+    public void countSumLine(String email) {
+        profitRepository.sumProfitLine();
+        countSum(email);
+    }
+
+    @Transactional
+    @Override
+    public void countSum(String email) {
+
+        ProfitTotal pte = profitTotalRepository.findByAccountProfitTotalEmailAndArticle(email, "Total incomes");
         Double jan = profitRepository.totalJan();
         pte.setJanuary(jan);
         Double feb = profitRepository.totalFeb();
@@ -195,19 +199,135 @@ public class ProfitServiceImpl implements ProfitService {
         pte.setNovember(nov);
         Double dec = profitRepository.totalDec();
         pte.setDecember(dec);
-        Double su = profitRepository.totalSum();
+        Double su = profitRepository.totalYear();
         pte.setYear(su);
+        profitTotalRepository.save(pte);
+    }
 
-        account.addProfitTotal(pte);
-        // profitTotalEntityRepository.save(pte);
+    @Transactional
+    @Override
+    public void balance(String email) {
+        Profit profitRest = profitRepository.findByAccountProfitEmailAndArticle(email, "Balance at the beginning");
+        Double february = profitRepository.restForFebruary();
+        if (february == 0)
+            profitRest.setFebruary(0.0);
+        else
+            profitRest.setFebruary(february);
+        Double march = profitRepository.restForMarch();
+        if (march == 0)
+            profitRest.setMarch(0.0);
+        else
+            profitRest.setMarch(march);
+        Double april = profitRepository.restForApril();
+        if (april == 0)
+            profitRest.setApril(0.0);
+        else
+            profitRest.setApril(april);
+        Double may = profitRepository.restForMay();
+        if (may == 0)
+            profitRest.setMay(0.0);
+        else
+            profitRest.setMay(may);
+        Double june = profitRepository.restForJune();
+        if (june == 0)
+            profitRest.setJune(0.0);
+        else
+            profitRest.setJune(june);
+        Double july = profitRepository.restForJuly();
+        if (july == 0)
+            profitRest.setJuly(0.0);
+        else
+            profitRest.setJuly(july);
+        Double august = profitRepository.restForAugust();
+        if (august == 0)
+            profitRest.setAugust(0.0);
+        else
+            profitRest.setAugust(august);
+        Double september = profitRepository.restForSeptember();
+        if (september == 0)
+            profitRest.setSeptember(0.0);
+        else
+            profitRest.setSeptember(september);
+        Double october = profitRepository.restForOctober();
+        if (october == 0)
+            profitRest.setOctober(0.0);
+        else
+            profitRest.setOctober(october);
+        Double november = profitRepository.restForNovember();
+        if (november == 0)
+            profitRest.setNovember(0.0);
+        else
+            profitRest.setNovember(november);
+        Double december = profitRepository.restForDecember();
+        if (december == 0)
+            profitRest.setDecember(0.0);
+        else
+            profitRest.setDecember(december);
+        profitRepository.save(profitRest);
+    }
+
+    //    Сохранение в "Opening balance"
+    @Transactional
+    @Override
+    public boolean startUpCapital(String article, Double january, Double february, Double march, Double april, Double may,
+                                  Double june, Double july, Double august, Double september, Double october, Double november,
+                                  Double december, Double year, String email) throws NotFoundException {
+        Profit profit = profitRepository.findByAccountProfitEmailAndArticle(email, "Opening balance");
+        if (profit == null) {
+            throw new NotFoundException("Such " + article + " don`t found");
+        }
+        if (january != null)
+            profit.setJanuary(january);
+        if (february != null && profit.getJanuary() == 0)
+            profit.setFebruary(february);
+        if (march != null && profit.getJanuary() == 0 && profit.getFebruary() == 0)
+            profit.setMarch(march);
+        if (april != null && profit.getJanuary() == 0 && profit.getFebruary() == 0 && profit.getMarch() == 0)
+            profit.setApril(april);
+        if (may != null && profit.getJanuary() == 0 && profit.getFebruary() == 0 && profit.getMarch() == 0 && profit.getApril() == 0)
+            profit.setMay(may);
+        if (june != null && profit.getJanuary() == 0 && profit.getFebruary() == 0 && profit.getMarch() == 0 && profit.getApril() == 0 && profit.getMay() == 0)
+            profit.setJune(june);
+        if (july != null && profit.getJanuary() == 0 && profit.getFebruary() == 0 && profit.getMarch() == 0 && profit.getApril() == 0 && profit.getMay() == 0 && profit.getJune() == 0)
+            profit.setJuly(july);
+        if (august != null && profit.getJanuary() == 0 && profit.getFebruary() == 0 && profit.getMarch() == 0 && profit.getApril() == 0 && profit.getMay() == 0 && profit.getJune() == 0 && profit.getJuly() == 0)
+            profit.setAugust(august);
+        if (september != null && profit.getJanuary() == 0 && profit.getFebruary() == 0 && profit.getMarch() == 0 && profit.getApril() == 0 && profit.getMay() == 0 && profit.getJune() == 0 && profit.getJuly() == 0 && profit.getAugust() == 0)
+            profit.setSeptember(september);
+        if (october != null && profit.getJanuary() == 0 && profit.getFebruary() == 0 && profit.getMarch() == 0 && profit.getApril() == 0 && profit.getMay() == 0 && profit.getJune() == 0 && profit.getJuly() == 0 && profit.getAugust() == 0 && profit.getSeptember() == 0)
+            profit.setOctober(october);
+        if (november != null && profit.getJanuary() == 0 && profit.getFebruary() == 0 && profit.getMarch() == 0 && profit.getApril() == 0 && profit.getMay() == 0 && profit.getJune() == 0 && profit.getJuly() == 0 && profit.getAugust() == 0 && profit.getSeptember() == 0 && profit.getOctober() == 0)
+            profit.setNovember(november);
+        if (december != null && profit.getJanuary() == 0 && profit.getFebruary() == 0 && profit.getMarch() == 0 && profit.getApril() == 0 && profit.getMay() == 0 && profit.getJune() == 0 && profit.getJuly() == 0 && profit.getAugust() == 0 && profit.getSeptember() == 0 && profit.getOctober() == 0 && profit.getNovember() == 0)
+            profit.setDecember(december);
+        for (int i = 0; i < 12; i++) {
+            for (int j = 0; j < 1; j++) {
+                countSum(email);
+            }
+            balance(email);
+        }
+        countSumLine(email);
+        profitRepository.save(profit);
         return true;
     }
 
     @Transactional
     @Override
-    public void deleteProfit(Long id) throws NotFoundException {
-        profitRepository.deleteById(id);
+    public void deleteProfit(String email, String article) throws NotFoundException {
+        Profit profit = profitRepository.findByAccountProfitEmailAndArticle(email, article);
+        if ("Balance at the beginning".equals(profit.getArticle())) {
+            throw new NotFoundException("Such " + article + " can not be deleted");
+        }
+        if ("Opening balance".equals(profit.getArticle())) {
+            throw new NotFoundException("Such " + article + " can not be deleted");
+        }
+        profitRepository.deleteProfitEntityByArticle(article);
+        for (int i = 0; i < 12; i++) {
+            for (int j = 0; j < 1; j++) {
+                countSum(email);
+            }
+            balance(email);
+        }
+        countSumLine(email);
     }
-
-
 }

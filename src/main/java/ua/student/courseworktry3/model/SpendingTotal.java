@@ -69,7 +69,7 @@ public class SpendingTotal {
     }
 
     public SpendingTotalDTO toDTO() {
-        return SpendingTotalDTO.of(id,article, january, february, march, april, may, june, july, august,
+        return SpendingTotalDTO.of(article, january, february, march, april, may, june, july, august,
                 september, october, november, december, year);
     }
 

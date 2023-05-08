@@ -14,24 +14,27 @@ import java.util.List;
 public interface ProfitService {
     List<ProfitDTO> getAllProfit (String email) throws DBIsEmptyException;
 
-    @Transactional
-    boolean addProfit(String article, Double january, Double february, Double march, Double april, Double may,
+     boolean addProfit(String article, Double january, Double february, Double march, Double april, Double may,
                       Double june, Double july, Double august, Double september, Double october, Double november,
                       Double december, Double sum, String email) throws AlreadyExistException;
 
-    ProfitDTO findByArticle(String article) throws NotFoundException;
+    ProfitDTO findByArticle(String article,String email) throws NotFoundException, DBIsEmptyException;
 
     List<ProfitTotalDTO> getAllTotalProfit(String email) throws DBIsEmptyException;
-
-//    boolean addProfitTotal(ProfitTotalModel profitTotalModel) throws AlreadyExistException;
 
     boolean updateProfit(String article, Double january, Double february, Double march, Double april, Double may,
                          Double june, Double july, Double august, Double september, Double october, Double november,
                          Double december, Double sum,String email) throws NotFoundException;
 
+    void countSumLine(String email);
 
+    void countSum(String email);
 
-    void deleteProfit (Long id) throws NotFoundException;
+    void balance(String email);
 
+    boolean startUpCapital(String article, Double january, Double february, Double march, Double april, Double may,
+                           Double june, Double july, Double august, Double september, Double october, Double november,
+                           Double december, Double year, String email) throws NotFoundException;
 
+    void deleteProfit(String email, String article) throws NotFoundException;
 }

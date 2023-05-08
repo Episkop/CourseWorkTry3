@@ -1,7 +1,7 @@
 package ua.student.courseworktry3.dto;
 
 public class SpendingTotalDTO {
-    private Long id;
+//    private Long id;
     private String article;
     private Double january;
     private Double february;
@@ -36,45 +36,45 @@ public class SpendingTotalDTO {
         this.year = year;
     }
 
-    public SpendingTotalDTO(Long id, String article, Double january, Double february, Double march, Double april, Double may,
-                            Double june, Double july, Double august, Double september, Double october, Double november,
-                            Double december, Double year) {
-        this.id = id;
-        this.article = article;
-        this.january = january;
-        this.february = february;
-        this.march = march;
-        this.april = april;
-        this.may = may;
-        this.june = june;
-        this.july = july;
-        this.august = august;
-        this.september = september;
-        this.october = october;
-        this.november = november;
-        this.december = december;
-        this.year = year;
-    }
+//    public SpendingTotalDTO(Long id, String article, Double january, Double february, Double march, Double april, Double may,
+//                            Double june, Double july, Double august, Double september, Double october, Double november,
+//                            Double december, Double year) {
+//        this.id = id;
+//        this.article = article;
+//        this.january = january;
+//        this.february = february;
+//        this.march = march;
+//        this.april = april;
+//        this.may = may;
+//        this.june = june;
+//        this.july = july;
+//        this.august = august;
+//        this.september = september;
+//        this.october = october;
+//        this.november = november;
+//        this.december = december;
+//        this.year = year;
+//    }
     public static SpendingTotalDTO of(String article, Double january, Double february, Double march, Double april, Double may,
                                       Double june, Double july, Double august, Double september, Double october, Double november,
                                       Double december, Double year){
         return new SpendingTotalDTO(article,january, february, march, april, may, june, july, august,
                 september, october, november, december,year);
     }
-    public static SpendingTotalDTO of(Long id, String article, Double january, Double february, Double march, Double april, Double may,
-                                      Double june, Double july, Double august, Double september, Double october, Double november,
-                                      Double december, Double year){
-        return new SpendingTotalDTO(id,article,january, february, march, april, may, june, july, august,
-                september, october, november, december,year);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+//    public static SpendingTotalDTO of(Long id, String article, Double january, Double february, Double march, Double april, Double may,
+//                                      Double june, Double july, Double august, Double september, Double october, Double november,
+//                                      Double december, Double year){
+//        return new SpendingTotalDTO(id,article,january, february, march, april, may, june, july, august,
+//                september, october, november, december,year);
+//    }
+//
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
 
     public String getArticle() {
         return article;
